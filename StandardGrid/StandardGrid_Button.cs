@@ -17,6 +17,8 @@ namespace StandardGrid
             //  TODO: Sample code showing how to access button host
             //
             ArcMap.Application.CurrentTool = null;
+            MainForm form = new MainForm();
+            form.Show();
         }
         protected override void OnUpdate()
         {
