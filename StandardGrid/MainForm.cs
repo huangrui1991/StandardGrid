@@ -14,6 +14,12 @@ namespace StandardGrid
         public MainForm()
         {
             InitializeComponent();
+            ScaleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            ScaleComboBox.Items.Add("1:10000");
+            ScaleComboBox.Items.Add("1:50000");
+            ScaleComboBox.Items.Add("1:100000");
+            ScaleComboBox.Items.Add("1:500000");
+            ScaleComboBox.SelectedIndex = 0;
         }
 
         
@@ -22,6 +28,31 @@ namespace StandardGrid
         {
 
         }
+
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void InputButton_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog OpenFileDialog = new OpenFileDialog();
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.InputTextBox.Text = OpenFileDialog.FileName;
+            }
+        }
+
+        private void OutputButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog FolderBrowserDialog = new FolderBrowserDialog();
+            if (FolderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.OutputTextBox.Text = FolderBrowserDialog.SelectedPath;
+            }
+        }
+
+        
 
        
 

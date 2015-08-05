@@ -69,6 +69,7 @@
             this.CancelButton.TabIndex = 9;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
+            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // OKButton
             // 
@@ -108,6 +109,7 @@
             this.OutputButton.TabIndex = 5;
             this.OutputButton.Text = "Path";
             this.OutputButton.UseVisualStyleBackColor = true;
+            this.OutputButton.Click += new System.EventHandler(this.OutputButton_Click);
             // 
             // OutputTextBox
             // 
@@ -136,6 +138,7 @@
             this.InputButton.TabIndex = 2;
             this.InputButton.Text = "Path";
             this.InputButton.UseVisualStyleBackColor = true;
+            this.InputButton.Click += new System.EventHandler(this.InputButton_Click);
             // 
             // InputTextBox
             // 
