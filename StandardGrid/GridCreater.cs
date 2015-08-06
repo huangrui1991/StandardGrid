@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.DataSourcesRaster;
+using ESRI.ArcGIS.Geometry;
 using System.Windows.Forms;
 
 namespace StandardGrid
@@ -60,18 +61,40 @@ namespace StandardGrid
                 IWorkspaceFactory WorkspaceFactory = new RasterWorkspaceFactoryClass();
                 IRasterWorkspace Workspace = WorkspaceFactory.OpenFromFile(ImageFolder,0) as IRasterWorkspace;
                 IGeoDataset Dataset = Workspace.OpenRasterDataset(ImageName) as IGeoDataset;
+                //get spatial reference
                 spatialReference = Dataset.SpatialReference.FactoryCode;
-                MessageBox.Show(spatialReference.ToString());
+                
+                
+                
+                //get extent
+                if (spatialReference != 0)
+                {
+                    IEnvelope Envelope = Dataset.Extent;
+                    IPoint LeftDownPoint = new PointClass();
+                    IPoint RightUpPoint = new PointClass();
+                    LeftDownPoint.X = Envelope.XMin;
+                    LeftDownPoint.Y = Envelope.YMin;
+                    RightUpPoint.X = Envelope.XMax;
+                    RightUpPoint.Y = Envelope.YMax;
+                }
+
+                // spatial reference to GCS
+
+
+
             }
             else
             {
                 MessageBox.Show("Image file path error!");
+                return;
             }
+            
             
         }
 
         private void _GetMapExtent()
         {
+
         }
 
         private void _GetMapUnitCode()
