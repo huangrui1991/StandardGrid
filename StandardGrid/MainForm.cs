@@ -52,6 +52,14 @@ namespace StandardGrid
             }
         }
 
+        private void OKButton_Click(object sender, EventArgs e)
+        {
+            GridCreater Creater = new GridCreater();
+            Creater.ImagePath = this.InputTextBox.Text;
+            Creater.TargetFolder = this.OutputTextBox.Text;
+            Creater.Create();
+        }
+
         
 
        
