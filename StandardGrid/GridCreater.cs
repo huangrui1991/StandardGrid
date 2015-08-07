@@ -229,7 +229,7 @@ namespace StandardGrid
 
             leftDownPointUintCode = LDPointRowCode_1000000 + LDPointColunmCode_1000000 + ScaleCode + LDPOintRowCode_str + LDPointColunmCode_str;
             rightUpPointUnitCode = RUPointRowCode_1000000 + RUPointColunmCode_1000000 + ScaleCode + RUPOintRowCode_str + RUPointColunmCode_str;
-            MessageBox.Show("haha"+leftDownPointUintCode + "," + rightUpPointUnitCode);
+            MessageBox.Show(leftDownPointUintCode + "," + rightUpPointUnitCode);
                 
 
         }
