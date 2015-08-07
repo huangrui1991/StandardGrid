@@ -57,6 +57,7 @@ namespace StandardGrid
             GridCreater Creater = new GridCreater();
             Creater.ImagePath = this.InputTextBox.Text;
             Creater.TargetFolder = this.OutputTextBox.Text;
+            Creater.Scale = this.ScaleComboBox.Text;
             Creater.Create();
         }
 
