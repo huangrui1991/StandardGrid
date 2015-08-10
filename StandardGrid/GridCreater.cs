@@ -187,14 +187,14 @@ namespace StandardGrid
                     {
                         ScaleCode = "D";
                         DeltaLongitude = 0.5;
-                        DeltaLatitude = 0.333;
+                        DeltaLatitude = 0.333333;
                         break;
                     }
                 case "1:50000":
                     {
                         ScaleCode = "E";
                         DeltaLongitude = 0.25;
-                        DeltaLatitude = 0.1667;
+                        DeltaLatitude = 0.166667;
                         break;
                     }
                 case "1:25000":
@@ -256,20 +256,34 @@ namespace StandardGrid
 
             leftUpPointUintCode = (LUPointRowCode_1000000 + LUPointColunmCode_1000000 + ScaleCode + LUPOintRowCode_str + LUPointColunmCode_str).Replace("-", "");
             rightDownPointUnitCode = (RDPointRowCode_1000000 + RDPointColunmCode_1000000 + ScaleCode + RDPOintRowCode_str + RDPointColunmCode_str).Replace("-", "");
-            MessageBox.Show(leftUpPointUintCode + "," + rightDownPointUnitCode);
+            //MessageBox.Show(leftUpPointUintCode + "," + rightDownPointUnitCode);
 
             LeftUpPoint.X = (LUPointLongtitude_1000000 - 31) * 6 + (LUPointColunmCode - 1) * DeltaLongitude;
             LeftUpPoint.Y = (LUPointLatitude_1000000 - 1) * 4 + (4 / DeltaLatitude - LUPointRowCode) * DeltaLatitude;
             RightDownPoint.X = (RDPointLongtitude_1000000 - 31) * 6 + (RDPointColunmCode - 1) * DeltaLongitude;
             RightDownPoint.Y = (RDPointLatitude_1000000 - 1) * 4 + (4 / DeltaLatitude - RDPointRowCode) * DeltaLatitude;
 
-            MessageBox.Show(LeftUpPoint.X.ToString() +" "+LeftUpPoint.Y.ToString() + " " + RightDownPoint.X.ToString() + " " + RightDownPoint.Y.ToString());
+            //MessageBox.Show(LeftUpPoint.X.ToString() +" "+LeftUpPoint.Y.ToString() + " " + RightDownPoint.X.ToString() + " " + RightDownPoint.Y.ToString());
         }
 
         //create standard grid map
         private void _CreateFeature()
         {
+            string LUPointUnitCode_100W = leftUpPointUintCode.Substring(0, 3);
+            string RDPointUnitCode_100W = rightDownPointUnitCode.Substring(0, 3);
+            string LUScale = leftUpPointUintCode.Substring(3, 1);
+            string RDScale = rightDownPointUnitCode.Substring(3, 1);
+            int LURow = Convert.ToInt32(leftUpPointUintCode.Substring(4, 3));
+            int LUColunm = Convert.ToInt32(leftUpPointUintCode.Substring(7,3));
+            int RDRow = Convert.ToInt32(rightDownPointUnitCode.Substring(4, 3));
+            int RDColunm = Convert.ToInt32(rightDownPointUnitCode.Substring(7, 3));
 
+            if (LUScale != RDScale)
+                return;
+            if(LUPointUnitCode_100W != RDPointUnitCode_100W)
+                return;
+
+            IWorkspaceFactory wspf = new ShapeFileWorkspaceFactory();
         }
 
         #endregion
