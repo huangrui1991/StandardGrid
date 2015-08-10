@@ -18,6 +18,9 @@ namespace StandardGrid
         private string leftUpPointUintCode;
         private string rightDownPointUnitCode;
 
+        private IPoint leftUpPoint = new PointClass();
+        private IPoint rightDownPoint = new PointClass();
+
         #region Properties
         public string ImagePath
         {
@@ -60,6 +63,30 @@ namespace StandardGrid
             set
             {
                 scale = value;
+            }
+        }
+
+        public IPoint LeftUpPoint
+        {
+            get
+            {
+                return leftUpPoint;
+            }
+            set
+            {
+                leftUpPoint = value;
+            }
+        }
+
+        public IPoint RightDownPoint
+        {
+            get
+            {
+                return rightDownPoint;
+            }
+            set
+            {
+                rightDownPoint = value;
             }
         }
         #endregion
@@ -195,11 +222,11 @@ namespace StandardGrid
                     return;
             }
 
-            int LUPOintRowCode = (int)(4 / DeltaLatitude - (int)((leftUpPoint.Y / 4) / DeltaLatitude));
-            int LUPointColunmCode = (int)((leftUpPoint.X / 6) / DeltaLongitude) + 1;
+            int LUPointRowCode = (int)(4 / DeltaLatitude - (int)((leftUpPoint.Y % 4) / DeltaLatitude));
+            int LUPointColunmCode = (int)((leftUpPoint.X % 6) / DeltaLongitude) + 1;
 
-            int RDPOintRowCode = (int)(4 / DeltaLatitude - (int)((RightDownPoint.Y / 4) / DeltaLatitude));
-            int RDPointColunmCode = (int)((RightDownPoint.X / 6) / DeltaLongitude) + 1;
+            int RDPointRowCode = (int)(4 / DeltaLatitude - (int)((RightDownPoint.Y % 4) / DeltaLatitude));
+            int RDPointColunmCode = (int)((RightDownPoint.X % 6) / DeltaLongitude) + 1;
 
             //config stantard code
             string LUPointRowCode_1000000 = ((char)((int)('A') + LUPointLatitude_1000000 - 1)).ToString();
@@ -207,30 +234,36 @@ namespace StandardGrid
             string RDPointRowCode_1000000 = ((char)((int)('A') + RDPointLatitude_1000000 - 1)).ToString();
             string RDPointColunmCode_1000000 = RDPointLongtitude_1000000.ToString();
 
-            int LUPointRowCode_100 = LUPOintRowCode / 100;
-            int LUPointRowCode_10 = (LUPOintRowCode - LUPointRowCode_100 * 100)/10;
-            int LUPointRowCode_1 = LUPOintRowCode - LUPointRowCode_100 * 100 - LUPointRowCode_10 * 10;
+            int LUPointRowCode_100 = LUPointRowCode / 100;
+            int LUPointRowCode_10 = (LUPointRowCode - LUPointRowCode_100 * 100)/10;
+            int LUPointRowCode_1 = LUPointRowCode - LUPointRowCode_100 * 100 - LUPointRowCode_10 * 10;
             string LUPOintRowCode_str = LUPointRowCode_100.ToString() + LUPointRowCode_10.ToString() + LUPointRowCode_1.ToString();
 
-            int LUPointColunmCode_100 = LUPOintRowCode / 100;
-            int LUPointColunmCode_10 = (LUPOintRowCode - LUPointColunmCode_100 * 100)/10;
-            int LUPointColunmCode_1 = LUPOintRowCode - LUPointColunmCode_100 * 100 - LUPointColunmCode_10 * 10;
+            int LUPointColunmCode_100 = LUPointColunmCode / 100;
+            int LUPointColunmCode_10 = (LUPointColunmCode - LUPointColunmCode_100 * 100) / 10;
+            int LUPointColunmCode_1 = LUPointColunmCode - LUPointColunmCode_100 * 100 - LUPointColunmCode_10 * 10;
             string LUPointColunmCode_str = LUPointColunmCode_100.ToString() + LUPointColunmCode_10.ToString() + LUPointColunmCode_1.ToString();
 
-            int RDPointRowCode_100 = RDPOintRowCode / 100;
-            int RDPointRowCode_10 = (RDPOintRowCode - RDPointRowCode_100 * 100)/10;
-            int RDPointRowCode_1 = RDPOintRowCode - RDPointRowCode_100 * 100 - RDPointRowCode_10 * 10;
+            int RDPointRowCode_100 = RDPointRowCode / 100;
+            int RDPointRowCode_10 = (RDPointRowCode - RDPointRowCode_100 * 100)/10;
+            int RDPointRowCode_1 = RDPointRowCode - RDPointRowCode_100 * 100 - RDPointRowCode_10 * 10;
             string RDPOintRowCode_str = RDPointRowCode_100.ToString() + RDPointRowCode_10.ToString() + RDPointRowCode_1.ToString();
 
-            int RDPointColunmCode_100 = RDPOintRowCode / 100;
-            int RDPointColunmCode_10 = (RDPOintRowCode - RDPointColunmCode_100 * 100)/10;
-            int RDPointColunmCode_1 = RDPOintRowCode - RDPointColunmCode_100 * 100 - RDPointColunmCode_10 * 10;
+            int RDPointColunmCode_100 = RDPointColunmCode / 100;
+            int RDPointColunmCode_10 = (RDPointColunmCode - RDPointColunmCode_100 * 100) / 10;
+            int RDPointColunmCode_1 = RDPointColunmCode - RDPointColunmCode_100 * 100 - RDPointColunmCode_10 * 10;
             string RDPointColunmCode_str = RDPointColunmCode_100.ToString() + RDPointColunmCode_10.ToString() + RDPointColunmCode_1.ToString();
 
-            leftUpPointUintCode = LUPointRowCode_1000000 + LUPointColunmCode_1000000 + ScaleCode + LUPOintRowCode_str + LUPointColunmCode_str;
-            rightDownPointUnitCode = RDPointRowCode_1000000 + RDPointColunmCode_1000000 + ScaleCode + RDPOintRowCode_str + RDPointColunmCode_str;
-            MessageBox.Show(leftUpPointUintCode.Replace("-", "") + "," + rightDownPointUnitCode.Replace("-", ""));
+            leftUpPointUintCode = (LUPointRowCode_1000000 + LUPointColunmCode_1000000 + ScaleCode + LUPOintRowCode_str + LUPointColunmCode_str).Replace("-", "");
+            rightDownPointUnitCode = (RDPointRowCode_1000000 + RDPointColunmCode_1000000 + ScaleCode + RDPOintRowCode_str + RDPointColunmCode_str).Replace("-", "");
+            MessageBox.Show(leftUpPointUintCode + "," + rightDownPointUnitCode);
 
+            LeftUpPoint.X = (LUPointLongtitude_1000000 - 31) * 6 + (LUPointColunmCode - 1) * DeltaLongitude;
+            LeftUpPoint.Y = (LUPointLatitude_1000000 - 1) * 4 + (4 / DeltaLatitude - LUPointRowCode) * DeltaLatitude;
+            RightDownPoint.X = (RDPointLongtitude_1000000 - 31) * 6 + (RDPointColunmCode - 1) * DeltaLongitude;
+            RightDownPoint.Y = (RDPointLatitude_1000000 - 1) * 4 + (4 / DeltaLatitude - RDPointRowCode) * DeltaLatitude;
+
+            MessageBox.Show(LeftUpPoint.X.ToString() +" "+LeftUpPoint.Y.ToString() + " " + RightDownPoint.X.ToString() + " " + RightDownPoint.Y.ToString());
         }
 
         //create standard grid map
