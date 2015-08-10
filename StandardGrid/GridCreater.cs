@@ -15,8 +15,8 @@ namespace StandardGrid
         private string targetFolder;
         private int spatialReference;
         private string scale;
-        private string leftDownPointUintCode;
-        private string rightUpPointUnitCode;
+        private string leftUpPointUintCode;
+        private string rightDownPointUnitCode;
 
         #region Properties
         public string ImagePath
@@ -92,26 +92,26 @@ namespace StandardGrid
 
                     MessageBox.Show(spatialReference.ToString());
                     IEnvelope Envelope = Dataset.Extent;
-                    IPoint LeftDownPoint = new PointClass();
-                    IPoint RightUpPoint = new PointClass();
-                    LeftDownPoint.X = Envelope.XMin;
-                    LeftDownPoint.Y = Envelope.YMin;
-                    RightUpPoint.X = Envelope.XMax;
-                    RightUpPoint.Y = Envelope.YMax;
+                    IPoint LeftUpPoint = new PointClass();
+                    IPoint RightDownPoint = new PointClass();
+                    LeftUpPoint.X = Envelope.XMin;
+                    LeftUpPoint.Y = Envelope.YMin;
+                    RightDownPoint.X = Envelope.XMax;
+                    RightDownPoint.Y = Envelope.YMax;
                     if (spatialReference == (int)esriSRGeoCSType.esriSRGeoCS_WGS1984)
                     {
-                        _GetMapUnitCode(LeftDownPoint, RightUpPoint);
+                        _GetMapUnitCode(LeftUpPoint, RightDownPoint);
                     }
                     else /*if (EsriSRProjCSTypes.Contains(spatialReference))*/
                     {
                         ISpatialReferenceFactory SRF = new SpatialReferenceEnvironmentClass();
-                        LeftDownPoint.SpatialReference = SRF.CreateProjectedCoordinateSystem(spatialReference);
-                        RightUpPoint.SpatialReference = SRF.CreateProjectedCoordinateSystem(spatialReference);
+                        LeftUpPoint.SpatialReference = SRF.CreateProjectedCoordinateSystem(spatialReference);
+                        RightDownPoint.SpatialReference = SRF.CreateProjectedCoordinateSystem(spatialReference);
 
-                        LeftDownPoint.Project(SRF.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984));
-                        RightUpPoint.Project(SRF.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984));
+                        LeftUpPoint.Project(SRF.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984));
+                        RightDownPoint.Project(SRF.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984));
 
-                        _GetMapUnitCode(LeftDownPoint, RightUpPoint);
+                        _GetMapUnitCode(LeftUpPoint, RightDownPoint);
                     }
                     
 
@@ -127,13 +127,13 @@ namespace StandardGrid
 
 
         //IPoint coordinate must be esriSRGeoCS_WGS1984
-        private void _GetMapUnitCode(IPoint leftDownPoint,IPoint RightUpPoint)
+        private void _GetMapUnitCode(IPoint leftUpPoint,IPoint RightDownPoint)
         {
             //compute 1:100000 map unit code
-            int LDPointLatitude_1000000 = (int)(leftDownPoint.Y / 4) + 1; 
-            int LDPointLongtitude_1000000 = (int)(leftDownPoint.X / 6) + 31;
-            int RUPointLatitude_1000000 = (int)(RightUpPoint.Y / 4) + 1;
-            int RUPointLongtitude_1000000 = (int)(RightUpPoint.X / 6) + 31;
+            int LUPointLatitude_1000000 = (int)(leftUpPoint.Y / 4) + 1; 
+            int LUPointLongtitude_1000000 = (int)(leftUpPoint.X / 6) + 31;
+            int RDPointLatitude_1000000 = (int)(RightDownPoint.Y / 4) + 1;
+            int RDPointLongtitude_1000000 = (int)(RightDownPoint.X / 6) + 31;
 
             //compute each scale map unit code
             double DeltaLatitude = 0;
@@ -195,41 +195,41 @@ namespace StandardGrid
                     return;
             }
 
-            int LDPOintRowCode = (int)(4 / DeltaLatitude - (int)((leftDownPoint.Y / 4) / DeltaLatitude));
-            int LDPointColunmCode = (int)((leftDownPoint.X / 6) / DeltaLongitude) + 1;
+            int LUPOintRowCode = (int)(4 / DeltaLatitude - (int)((leftUpPoint.Y / 4) / DeltaLatitude));
+            int LUPointColunmCode = (int)((leftUpPoint.X / 6) / DeltaLongitude) + 1;
 
-            int RUPOintRowCode = (int)(4 / DeltaLatitude - (int)((RightUpPoint.Y / 4) / DeltaLatitude));
-            int RUPointColunmCode = (int)((RightUpPoint.X / 6) / DeltaLongitude) + 1;
+            int RDPOintRowCode = (int)(4 / DeltaLatitude - (int)((RightDownPoint.Y / 4) / DeltaLatitude));
+            int RDPointColunmCode = (int)((RightDownPoint.X / 6) / DeltaLongitude) + 1;
 
             //config stantard code
-            string LDPointRowCode_1000000 = ((char)((int)('A') + LDPointLatitude_1000000 - 1)).ToString();
-            string LDPointColunmCode_1000000 = LDPointLongtitude_1000000.ToString();
-            string RUPointRowCode_1000000 = ((char)((int)('A') + RUPointLatitude_1000000 - 1)).ToString();
-            string RUPointColunmCode_1000000 = RUPointLongtitude_1000000.ToString();
+            string LUPointRowCode_1000000 = ((char)((int)('A') + LUPointLatitude_1000000 - 1)).ToString();
+            string LUPointColunmCode_1000000 = LUPointLongtitude_1000000.ToString();
+            string RDPointRowCode_1000000 = ((char)((int)('A') + RDPointLatitude_1000000 - 1)).ToString();
+            string RDPointColunmCode_1000000 = RDPointLongtitude_1000000.ToString();
 
-            int LDPointRowCode_100 = LDPOintRowCode / 100;
-            int LDPointRowCode_10 = (LDPOintRowCode - LDPointRowCode_100 * 100)/10;
-            int LDPointRowCode_1 = LDPOintRowCode - LDPointRowCode_100 * 100 - LDPointRowCode_10 * 10;
-            string LDPOintRowCode_str = LDPointRowCode_100.ToString() + LDPointRowCode_10.ToString() + LDPointRowCode_1.ToString();
+            int LUPointRowCode_100 = LUPOintRowCode / 100;
+            int LUPointRowCode_10 = (LUPOintRowCode - LUPointRowCode_100 * 100)/10;
+            int LUPointRowCode_1 = LUPOintRowCode - LUPointRowCode_100 * 100 - LUPointRowCode_10 * 10;
+            string LUPOintRowCode_str = LUPointRowCode_100.ToString() + LUPointRowCode_10.ToString() + LUPointRowCode_1.ToString();
 
-            int LDPointColunmCode_100 = LDPOintRowCode / 100;
-            int LDPointColunmCode_10 = (LDPOintRowCode - LDPointColunmCode_100 * 100)/10;
-            int LDPointColunmCode_1 = LDPOintRowCode - LDPointColunmCode_100 * 100 - LDPointColunmCode_10 * 10;
-            string LDPointColunmCode_str = LDPointColunmCode_100.ToString() + LDPointColunmCode_10.ToString() + LDPointColunmCode_1.ToString();
+            int LUPointColunmCode_100 = LUPOintRowCode / 100;
+            int LUPointColunmCode_10 = (LUPOintRowCode - LUPointColunmCode_100 * 100)/10;
+            int LUPointColunmCode_1 = LUPOintRowCode - LUPointColunmCode_100 * 100 - LUPointColunmCode_10 * 10;
+            string LUPointColunmCode_str = LUPointColunmCode_100.ToString() + LUPointColunmCode_10.ToString() + LUPointColunmCode_1.ToString();
 
-            int RUPointRowCode_100 = RUPOintRowCode / 100;
-            int RUPointRowCode_10 = (RUPOintRowCode - RUPointRowCode_100 * 100)/10;
-            int RUPointRowCode_1 = RUPOintRowCode - RUPointRowCode_100 * 100 - RUPointRowCode_10 * 10;
-            string RUPOintRowCode_str = RUPointRowCode_100.ToString() + RUPointRowCode_10.ToString() + RUPointRowCode_1.ToString();
+            int RDPointRowCode_100 = RDPOintRowCode / 100;
+            int RDPointRowCode_10 = (RDPOintRowCode - RDPointRowCode_100 * 100)/10;
+            int RDPointRowCode_1 = RDPOintRowCode - RDPointRowCode_100 * 100 - RDPointRowCode_10 * 10;
+            string RDPOintRowCode_str = RDPointRowCode_100.ToString() + RDPointRowCode_10.ToString() + RDPointRowCode_1.ToString();
 
-            int RUPointColunmCode_100 = RUPOintRowCode / 100;
-            int RUPointColunmCode_10 = (RUPOintRowCode - RUPointColunmCode_100 * 100)/10;
-            int RUPointColunmCode_1 = RUPOintRowCode - RUPointColunmCode_100 * 100 - RUPointColunmCode_10 * 10;
-            string RUPointColunmCode_str = RUPointColunmCode_100.ToString() + RUPointColunmCode_10.ToString() + RUPointColunmCode_1.ToString();
+            int RDPointColunmCode_100 = RDPOintRowCode / 100;
+            int RDPointColunmCode_10 = (RDPOintRowCode - RDPointColunmCode_100 * 100)/10;
+            int RDPointColunmCode_1 = RDPOintRowCode - RDPointColunmCode_100 * 100 - RDPointColunmCode_10 * 10;
+            string RDPointColunmCode_str = RDPointColunmCode_100.ToString() + RDPointColunmCode_10.ToString() + RDPointColunmCode_1.ToString();
 
-            leftDownPointUintCode = LDPointRowCode_1000000 + LDPointColunmCode_1000000 + ScaleCode + LDPOintRowCode_str + LDPointColunmCode_str;
-            rightUpPointUnitCode = RUPointRowCode_1000000 + RUPointColunmCode_1000000 + ScaleCode + RUPOintRowCode_str + RUPointColunmCode_str;
-            MessageBox.Show(leftDownPointUintCode.Replace("-", "") + "," + rightUpPointUnitCode.Replace("-", ""));
+            leftUpPointUintCode = LUPointRowCode_1000000 + LUPointColunmCode_1000000 + ScaleCode + LUPOintRowCode_str + LUPointColunmCode_str;
+            rightDownPointUnitCode = RDPointRowCode_1000000 + RDPointColunmCode_1000000 + ScaleCode + RDPOintRowCode_str + RDPointColunmCode_str;
+            MessageBox.Show(leftUpPointUintCode.Replace("-", "") + "," + rightDownPointUnitCode.Replace("-", ""));
 
         }
 
