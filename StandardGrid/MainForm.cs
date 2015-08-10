@@ -22,9 +22,12 @@ namespace StandardGrid
         private void MainForm_Load(object sender, EventArgs e)
         {
             ScaleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            ScaleComboBox.Items.Add("1:5000");
             ScaleComboBox.Items.Add("1:10000");
+            ScaleComboBox.Items.Add("1:25000");
             ScaleComboBox.Items.Add("1:50000");
             ScaleComboBox.Items.Add("1:100000");
+            ScaleComboBox.Items.Add("1:250000");
             ScaleComboBox.Items.Add("1:500000");
             ScaleComboBox.SelectedIndex = 0;
         }

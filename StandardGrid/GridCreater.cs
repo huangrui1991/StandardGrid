@@ -43,7 +43,7 @@ namespace StandardGrid
             }
         }
 
-        public int SpatialReference
+        public  int SpatialReference
         {
             get
             {
@@ -229,10 +229,16 @@ namespace StandardGrid
 
             leftDownPointUintCode = LDPointRowCode_1000000 + LDPointColunmCode_1000000 + ScaleCode + LDPOintRowCode_str + LDPointColunmCode_str;
             rightUpPointUnitCode = RUPointRowCode_1000000 + RUPointColunmCode_1000000 + ScaleCode + RUPOintRowCode_str + RUPointColunmCode_str;
-            MessageBox.Show(leftDownPointUintCode + "," + rightUpPointUnitCode);
-                
+            MessageBox.Show(leftDownPointUintCode.Replace("-", "") + "," + rightUpPointUnitCode.Replace("-", ""));
 
         }
+
+        //create standard grid map
+        private void _CreateFeature()
+        {
+
+        }
+
         #endregion
 
         public void Create()
